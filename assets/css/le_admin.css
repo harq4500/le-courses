@@ -1,0 +1,27 @@
+.le_school-upload{
+    height: fit-content;
+    overflow: auto;
+    display: table;
+}
+.le_school-upload img{
+    max-width:100%;
+    max-height:80px;
+}
+.regular-text.error{
+    border-color: #d63638!important;
+    box-shadow: 0 0 2px rgba(214,54,56,.8);
+}
+
+.button-danger {
+    color: #d63638!important;
+    border-color: #d63638!important;
+}
+.button-danger span{
+    vertical-align: sub;
+}
+.button-danger:focus{
+    box-shadow: 0 0 0 1px #d63638!important;
+}
+.le_input{
+    width:100%;
+}
