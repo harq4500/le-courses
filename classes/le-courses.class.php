@@ -19,6 +19,9 @@ class LE_Courses{
     $CustomPost  = new CustomPost();
     $Import = new Import();
     $LE_Shortcodes =  new LE_Shortcodes(); 
+    $Counter = new Counter();
+
+    $Counter->rewrites_init();
 
     add_action('add_meta_boxes', array($CustomPost, 'meta_box'));
 
@@ -39,6 +42,18 @@ class LE_Courses{
     add_filter( 'cron_schedules', array('LE_Courses', 'le_add_weekly' ));
 
     add_action( 'le_import_feeds', array($Import, 'cron_import' ));
+
+    add_filter('template_include', array($CustomPost,'school_set_template'));
+
+    /**
+     * Counter
+     */
+
+     add_filter( 'request', array($Counter,'handle_request' ));
+     add_action( 'template_redirect', array($Counter,'redirect' ));
+
+     add_filter( 'manage_courses_posts_columns', array($Counter, 'set_custom_edit_columns' ));
+     add_action( 'manage_courses_posts_custom_column' , array($Counter,'custom_column'), 10, 2 );
   }
 
   public static function plugin_activation(){

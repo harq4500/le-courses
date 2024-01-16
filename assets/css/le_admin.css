@@ -12,14 +12,15 @@
     box-shadow: 0 0 2px rgba(214,54,56,.8);
 }
 
-.button-danger {
+.button-danger_le {
     color: #d63638!important;
     border-color: #d63638!important;
+    background-color:#fff!important;
 }
-.button-danger span{
+.button-danger_le span{
     vertical-align: sub;
 }
-.button-danger:focus{
+.button-danger_le:focus{
     box-shadow: 0 0 0 1px #d63638!important;
 }
 .le_input{

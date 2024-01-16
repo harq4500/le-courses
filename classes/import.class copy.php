@@ -143,7 +143,7 @@ class Import{
         }
         
         $xml = $this->importData($this->xmlUrl, $this->school);
-        echo "<p>Импортировано ". $this->imported_feeds ." из ".count($xml->shop->offers->offer)."</p>";
+        echo "<p>Импортировано ". $this->imported_feeds ." из ".count($xml->channel->item)."</p>";
         
     }
 
@@ -151,13 +151,13 @@ class Import{
         $xml = file_get_contents( $url);
         $xml = preg_replace("/(<\/?)(\w+):([^>]*>)/", "$1$2$3", $xml); 
         $xml = simplexml_load_string($xml);
-      
-        foreach($xml->shop->offers->offer as $item){
-         
-            if(!$this->feedExists($school, (string) $item->attributes()->id)){
-               
+       
+        foreach($xml->channel->item as $item){
+          
+            if(!$this->feedExists($school, (int)$item->gid)){
+            
                 $post_id = wp_insert_post(array(
-                        'post_title'=> (string) $item->name, 
+                        'post_title'=> (string) $item->title, 
                         'post_type'=>'courses', 
                         'post_content'=>(string) $item->description,
                         'post_status'=> 'publish',
@@ -172,109 +172,41 @@ class Import{
                 if ($post_id) {
                     
                     // insert post meta
-                    if(isset($item->picture)){
-                        add_post_meta($post_id, '_course_image_link', (string) $item->picture);
-                    }
-                    if(isset($item->currencyId)){
-                        add_post_meta($post_id, '_course_currency', (string) $item->currencyId);
-                    }
-
-                    if(isset($item->price)){
-                        add_post_meta($post_id, '_course_price', (string)$item->price);
-
-
-                        if(isset($item->creditprice) && !empty($item->creditprice)){
-                            add_post_meta($post_id, '_course_payment_by_installment', $item->creditprice);
-                        }else{
-                            $tobedevided = 24;
-                            //checl for "Оплата в рассрочку"
-                            foreach($item->param as $param){
-                            
-                                if($param->attributes()->name == 'Оплата в рассрочку'){
-                                
-                                $tobedevided = (int)$param + 1;
-                                }
-                            }
-                            add_post_meta($post_id, '_course_payment_by_installment', ceil((int)$item->price / $tobedevided));
-                        }
-                    }
-                    if(isset($item->oldprice)){
-                        add_post_meta($post_id, '_course_old_price', (string)$item->oldprice);
+                    if(isset($item->gimage_link)){
+                        add_post_meta($post_id, '_course_image_link', (string) $item->gimage_link);
                     }
                     
-                    //Check here start date
-                    $toCheckDate = array(
-                        'Ближайшая дата',
-                        'Dateivent',
-                        'Ближайшая дата начала занятий'
-                    );
-
-                  
-
-                    foreach($item->param as $param){
-                        
-                        if(in_array($param->attributes()->name, $toCheckDate)){
-                           
-                            add_post_meta($post_id, '_course_start_date',(string)$param);
-                        }
-                    }
-                       
-                    
-                    
-                    //check here duration
-                    $toCheckDuration = array(
-                        'Продолжительность',
-                        'Длительность',
-                        'Продолжительность обучения, недель',
-                        'Продолжительность обучения, месяцев'
-                        
-                    );
-                    if(isset($item->duration) && !empty($item->duration)){
-                        $duration = (string)$item->duration;
-                        if(preg_match("/^\d+(?:,\d+)*$/",$duration)) {
-                            $duration .= " мес.";
-                           
-                        }
-                        add_post_meta($post_id, '_course_duration', (string)$duration);
+                    if( $item->gavailability == 'in stock'){
+                        add_post_meta($post_id, '_course_availability', 'instock');
                     }else{
-                        foreach($item->param as $param){
-                          
-                            if(in_array($param->attributes()->name, $toCheckDuration)){
-                            
-                                $duration = (string)$param;
-                             
-                                if($param->attributes()->name == 'Продолжительность обучения, недель'){
-                                    if(preg_match("/^\d+(?:,\d+)*$/",$duration)) {
-                                        $duration .= " нед.";
-                                    }
-                                }
-
-                               
-                                if(preg_match("/^\d+(?:,\d+)*$/",$duration)) {
-                                    $duration .= " мес.";
-                                   
-                                }
-                                
-                               add_post_meta($post_id, '_course_duration', $duration);
-                            }
-                        }
+                        add_post_meta($post_id, '_course_availability', 'outstock');
+                    }
+                    if(isset($item->gprice)){
+                        add_post_meta($post_id, '_course_price', (string) $item->gprice);
                     }
 
-                    if(isset($item->url)){
-                        add_post_meta($post_id, '_course_link', (string)$item->url);
+                    if(isset($item->gsale_price)){
+                        add_post_meta($post_id, '_course_sale_price', (string)$item->gsale_price);
+                    }
+                    if(isset($item->ginstallment->gamount)){
+                        add_post_meta($post_id, '_course_payment_info', (string)$item->ginstallment->gamount);
                     }
 
-                    if(isset($item->sales_notes)){
-                        add_post_meta($post_id, '_course_sale_info', (string)$item->sales_notes);
+                    if(isset($item->ginstallment->gmonths)){
+                        add_post_meta($post_id, '_course_duration', (string)$item->ginstallment->gmonths);
                     }
-                    if(isset($item->attributes()->id)){
-                        add_post_meta($post_id, '_course_external_id', (string)$item->attributes()->id);
+
+                    if(isset($item->link)){
+                        add_post_meta($post_id, '_course_link', (string)$item->link);
+                    }
+                    if(isset($item->gid)){
+                        add_post_meta($post_id, '_course_external_id', (string)$item->gid);
                     }
                     $this->imported_feeds ++;
-                   
+                    
                 }
                 
-            } 
+            }
 
            
         }
@@ -349,7 +281,7 @@ class Import{
                 $school = $urlItem->school->term_id;
                 $xml = $this->importData($url, $school);
                 if($not_cron){
-                    echo "<p>Импортировано ". $this->imported_feeds ." из ".count($xml->shop->offers->offer)."</p>";
+                    echo "<p>Импортировано ". $this->imported_feeds ." из ".count($xml->channel->item)."</p>";
                 }
             }
         }

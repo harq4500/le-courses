@@ -141,11 +141,13 @@ class CustomPost{
         * from the database and use the value for the form.
         */
         $course_image_link = get_post_meta( $post->ID, '_course_image_link', true );
-        $course_availability = get_post_meta( $post->ID, '_course_availability', true );
+        $course_currency = get_post_meta( $post->ID, '_course_currency', true );
         $course_price = get_post_meta( $post->ID, '_course_price', true );
+        $course_old_price = get_post_meta( $post->ID, '_course_old_price', true );
         $course_sale_price = get_post_meta( $post->ID, '_course_sale_price', true );
-        $course_payment_info =  get_post_meta( $post->ID, '_course_payment_info', true );
+        $course_sale_info = get_post_meta( $post->ID, '_course_sale_info', true );
         $course_start_date = get_post_meta( $post->ID, '_course_start_date', true );
+        $course_payment_by_installment = get_post_meta( $post->ID, '_course_payment_by_installment', true );
         $course_duration = get_post_meta( $post->ID, '_course_duration', true );
         $course_link = get_post_meta( $post->ID, '_course_link', true );
         $course_external_id = get_post_meta( $post->ID, '_course_external_id', true );
@@ -187,29 +189,31 @@ class CustomPost{
         }
         }
 
-        if ( ! isset( $_POST['course_availability'] ) ) {
-        return;
-        }
+        
 
         $course_image_link = sanitize_text_field( $_POST['course_image_link'] );
-        $course_availability = sanitize_text_field( $_POST['course_availability'] );
-        $course_price = sanitize_text_field( $_POST['course_price'] );
+        $course_currency = sanitize_text_field( $_POST['course_currency'] );
+        $course_price = sanitize_text_field( $_POST['course_price'] ); //+
+        $course_old_price = sanitize_text_field( $_POST['course_old_price'] );
         $course_sale_price = sanitize_text_field( $_POST['course_sale_price'] );
-        $course_payment_info = sanitize_text_field( $_POST['course_payment_info'] );
+        $course_sale_info = sanitize_text_field( $_POST['course_sale_info'] );
+        $course_payment_by_installment = sanitize_text_field( $_POST['course_payment_by_installment'] );
         $course_start_date = sanitize_text_field( $_POST['course_start_date'] );
         $course_duration = sanitize_text_field( $_POST['course_duration'] );
         $course_link = sanitize_text_field( $_POST['course_link'] );
         $course_external_id = sanitize_text_field( $_POST['course_external_id'] );
 
-        update_post_meta( $post_id, '_course_image_link', $course_image_link );
-        update_post_meta( $post_id, '_course_availability', $course_availability );
-        update_post_meta( $post_id, '_course_price', $course_price );
+        update_post_meta( $post_id, '_course_image_link', $course_image_link );//+
+        update_post_meta( $post_id, '_course_currency', $course_currency );//+
+        update_post_meta( $post_id, '_course_price', $course_price );//+
+        update_post_meta( $post_id, '_course_old_price', $course_old_price );//+
         update_post_meta( $post_id, '_course_sale_price', $course_sale_price );
-        update_post_meta( $post_id, '_course_payment_info', $course_payment_info );
+        update_post_meta( $post_id, '_course_sale_info', $course_sale_info );
+        update_post_meta( $post_id, '_course_payment_by_installment', $course_payment_by_installment );
         update_post_meta( $post_id, '_course_start_date', $course_start_date );
         update_post_meta( $post_id, '_course_duration', $course_duration );
-        update_post_meta( $post_id, '_course_link', $course_link );
-        update_post_meta( $post_id, '_course_external_id', $course_external_id );
+        update_post_meta( $post_id, '_course_link', $course_link ); //+
+        update_post_meta( $post_id, '_course_external_id', $course_external_id );//+
     }
 
     public function le_school_add_term_fields( $taxonomy ) {
@@ -257,6 +261,20 @@ class CustomPost{
        
 
         wp_enqueue_script('le_school_script', LE_PLUGIN_URL . '/assets/js/school_taxonomy.js',array('jquery', 'media-upload'), '1.0.0', true);
+    }
+
+    
+    public function school_set_template( $template ){
+
+        //Add option for plugin to turn this off? If so just return $template
+
+        //Check if the taxonomy is being viewed 
+        //Suggested: check also if the current template is 'suitable'
+
+        if( is_tax('schools'))
+            $template = LE_PLUGIN_DIR.'views/taxonomy-school.php';
+
+        return $template;
     }
 
 }

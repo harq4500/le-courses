@@ -8,6 +8,7 @@ class LE_Shortcodes{
     
     public function le_enqueue(){
         wp_enqueue_style( 'le_style_fr', LE_PLUGIN_URL . '/assets/css/le_style.css', false, '1.0.0' );
+        // wp_enqueue_style( 'le_style', LE_PLUGIN_URL . '/assets/css/test.css', false, '1.0.0' );
     }
 
     public function getCourses($atts){
@@ -26,7 +27,7 @@ class LE_Shortcodes{
         $args = array(
             'orderby'=>'date',
             'post_type'=>'courses',
-            'post_status'=>'publish'
+            'post_status'=>'publish',
         );
 
         if(isset($atts) && !empty($atts)){
@@ -74,11 +75,13 @@ class LE_Shortcodes{
         foreach($posts as  $post){
 
             $post->course_image_link = get_post_meta( $post->ID, '_course_image_link', true );
-            $post->course_availability = get_post_meta( $post->ID, '_course_availability', true );
+            $post->course_currency = get_post_meta( $post->ID, '_course_currency', true );
             $post->course_price = get_post_meta( $post->ID, '_course_price', true );
+            $post->course_old_price = get_post_meta( $post->ID, '_course_old_price', true );
             $post->course_sale_price = get_post_meta( $post->ID, '_course_sale_price', true );
-            $post->course_payment_info = get_post_meta( $post->ID, '_course_payment_info', true );
+            $post->course_sale_info = get_post_meta( $post->ID, '_course_sale_info', true );
             $post->course_start_date = get_post_meta( $post->ID, '_course_start_date', true );
+            $post->course_payment_by_installment = get_post_meta( $post->ID, '_course_payment_by_installment', true );
             $post->course_duration = get_post_meta( $post->ID, '_course_duration', true );
             $post->course_link = get_post_meta( $post->ID, '_course_link', true );
             $post->course_external_id = get_post_meta( $post->ID, '_course_external_id', true );

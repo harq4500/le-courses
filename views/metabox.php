@@ -3,7 +3,7 @@
         <tr>
             <th scope="row">
                 <label for="course_image_link">
-                Альтернативная ссылка на изображение
+                    Изображение
                 </label>
             </th>
             <td>
@@ -12,15 +12,12 @@
         </tr>
         <tr>
             <th scope="row">
-                <label for="course_availability">
-                    Доступность
+                <label for="course_currency">
+                    Валюта
                 </label>
             </th>
             <td>
-                <select id="course_availability" name="course_availability" class="le_input">
-                    <option value="instock" <?php echo (esc_attr( $course_availability ) == 'instock' ? 'selected' : ''); ?>>В наличии</option>
-                    <option value="outstock" <?php echo (esc_attr( $course_availability ) == 'outstock' ? 'selected' : ''); ?>>Нет в наличии</option>
-                </select>
+            <input type="text" id="course_currency" name="course_currency" value="<?php echo esc_attr( $course_currency ); ?>" class="le_input"/>
             </td>
         </tr>
         <tr>
@@ -35,6 +32,16 @@
         </tr>
         <tr>
             <th scope="row">
+                <label for="course_old_price">
+                    Старая цена
+                </label>
+            </th>
+            <td>
+                <input type="text" id="course_old_price" name="course_old_price" value="<?php echo esc_attr( $course_old_price ); ?>"  class="le_input"/>
+            </td>
+        </tr>
+        <!-- <tr>
+            <th scope="row">
                 <label for="course_sale_price">
                     Сниженная цена
                 </label>
@@ -42,15 +49,25 @@
             <td>
                 <input type="text" id="course_sale_price" name="course_sale_price" value="<?php echo esc_attr( $course_sale_price ); ?>" class="le_input"/>
             </td>
-        </tr>
+        </tr>-->
         <tr>
             <th scope="row">
-                <label for="course_payment_info">
+                <label for="course_sale_info">
                     Платежная информация
                 </label>
             </th>
             <td>
-                <input type="text" id="course_payment_info" name="course_payment_info" value="<?php echo esc_attr( $course_payment_info ); ?>" class="le_input"/>
+                <input type="text" id="course_sale_info" name="course_sale_info" value="<?php echo esc_attr( $course_sale_info ); ?>" class="le_input"/>
+            </td>
+        </tr> 
+        <tr>
+            <th scope="row">
+                <label for="course_payment_by_installment">
+                Оплата в рассрочку
+                </label>
+            </th>
+            <td>
+                <input type="text" id="course_payment_by_installment" name="course_payment_by_installment" value="<?php echo esc_attr( $course_payment_by_installment ); ?>" class="le_input"/>
             </td>
         </tr>
         <tr>
@@ -60,17 +77,17 @@
                 </label>
             </th>
             <td>
-                <input type="date" id="course_start_date" name="course_start_date" value="<?php echo esc_attr( $course_start_date ); ?>" class="le_input"/>
+                <input type="text" id="course_start_date" name="course_start_date" value="<?php echo esc_attr( $course_start_date ); ?>" class="le_input"/>
             </td>
         </tr>
         <tr>
             <th scope="row">
                 <label for="course_duration">
-                Длительность (мес.)
+                Длительность
                 </label>
             </th>
             <td>
-                <input type="number" id="course_duration" name="course_duration" value="<?php echo esc_attr( $course_duration ); ?>"  class="le_input"/>
+                <input type="text" id="course_duration" name="course_duration" value="<?php echo esc_attr( $course_duration ); ?>"  class="le_input"/>
             </td>
         </tr>
         <tr>

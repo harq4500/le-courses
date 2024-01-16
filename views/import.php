@@ -61,7 +61,7 @@
                 <td >
                     <form action="<?php echo admin_url() .'edit.php?post_type=courses&page=le-courses-import'?>" method="POST">
                         <p>
-                            <button class="button button-danger" type="submit" name="delete" value="<?php echo $addedUrlItem->id; ?>">
+                            <button class="button button-danger_le" type="submit" name="delete" value="<?php echo $addedUrlItem->id; ?>">
                                 <span class="dashicons dashicons-trash"></span>
                             </button>
                         </p>

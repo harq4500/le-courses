@@ -2,9 +2,6 @@
 
 class LE_Db{
 
-
-
-
     public function create(){
        $this->import_urls_table();
     }

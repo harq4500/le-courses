@@ -23,7 +23,10 @@ define( 'LE_VERSION', '1.0' );
 define( 'LE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
+
+require_once( LE_PLUGIN_DIR . '/includes/functions.php' );
 require_once( LE_PLUGIN_DIR . '/classes/db.class.php' );
+require_once( LE_PLUGIN_DIR . '/classes/counter.class.php' );
 require_once( LE_PLUGIN_DIR . '/classes/custom-post.class.php' );
 require_once( LE_PLUGIN_DIR . '/classes/import.class.php' );
 require_once( LE_PLUGIN_DIR . '/classes/le-courses.class.php' );
